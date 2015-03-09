@@ -1,0 +1,32 @@
+{% load i18n %}
+{% load humanize %}
+
+<li class="dropdown-header" xmlns="http://www.w3.org/1999/html">
+    <i class="ace-icon fa fa-exclamation-triangle"></i>
+    <span id="notification_total">{{ unread_notification_num }}</span>通知
+</li>
+{% if app_notifications or site_notifications %}
+
+    {% for notification in app_notifications %}
+        <li>
+            {{ notification|safe }}
+            <i>{{ notification.date|naturaltime }}</i> </a>
+        </li>
+    {% endfor %}
+    {% for notification in site_notifications %}
+        <li>
+            {{ notification|safe }}
+            <i>{{ notification.date|naturaltime }}</i> </a>
+        </li>
+    {% endfor %}
+{% else %}
+    <li style="text-align: center">没有新的通知</li>
+{% endif %}
+<li style="text-align: center" class="dropdown-footer">
+    <a href="{% url 'notifications' %}">
+        查看所有通知
+        <i class="ace-icon fa fa-arrow-right"></i>
+    </a>
+</li>
+
+

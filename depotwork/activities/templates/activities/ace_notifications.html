@@ -1,0 +1,432 @@
+{% extends 'base/base4auth.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load l10n %}
+{% load humanize %}
+
+{% block title %} 查看所有通知 {% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "base_from_ace/css/jquery-ui.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "base_from_ace/css/datepicker.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "base_from_ace/css/ui.jqgrid.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "base_from_ace/css/chosen.css" %}"/>
+
+    {#  custom css  #}
+    <link rel="stylesheet" href="{% static 'css/customs.css' %}">
+{% endblock head %}
+
+
+{% block page_content %}
+    <!-- PAGE CONTENT BEGINS -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="tabbable">
+                <ul id="inbox-tabs" class="inbox-tabs nav nav-tabs padding-16 tab-size-bigger tab-space-1">
+                    <li class="">
+                        <a data-toggle="tab" href="#notification" data-target="site_notification">
+                            <i class="blue ace-icon fa fa-inbox bigger-130"></i>
+                            <span class="bigger-110">站内通知</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a data-toggle="tab" href="#app_notification" data-target="app_notification">
+                            <i class="blue ace-icon fa fa-envelope  bigger-130"></i>
+                            <span class="bigger-110">应用动态</span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="pink ace-icon fa fa-tags bigger-130"></i>
+
+													<span class="bigger-110">
+														分类查看
+														<i class="ace-icon fa fa-caret-down"></i>
+													</span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-light-blue dropdown-125">
+                            <li>
+                                <a data-toggle="tab" href="#tag-1">
+                                    <span class="mail-tag badge badge-pink"></span>
+                                    <span class="pink">Tag#1</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a data-toggle="tab" href="#tag-family">
+                                    <span class="mail-tag badge badge-success"></span>
+                                    <span class="green">资产管理</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a data-toggle="tab" href="#tag-friends">
+                                    <span class="mail-tag badge badge-info"></span>
+                                    <span class="blue">Friends</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a data-toggle="tab" href="#tag-work">
+                                    <span class="mail-tag badge badge-grey"></span>
+                                    <span class="grey">Work</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <!-- /.dropdown -->
+                </ul>
+
+                <div class="tab-content no-border no-padding">
+                    <div id="notification" class="tab-pane in active">
+                        <div class="message-container">
+                            <div id="id-message-list-navbar" class="message-navbar clearfix">
+                                <div class="message-bar">
+                                    <div class="message-infobar" id="id-message-infobar">
+                                        <span class="blue bigger-150">
+
+                                            通知{{ notification_type }}
+
+                                        </span>
+                                        <span class="grey bigger-110">
+
+                                            (2{{ unread_num }} 未读)
+
+                                        </span>
+                                    </div>
+                                    <div class="message-toolbar hide">
+                                        <div class="inline position-relative align-left">
+                                            <button class="btn btn-xs btn-white btn-primary" type="button">
+                                                <i class="ace-icon fa fa-eye bigger-125 blue"></i>
+                                                <span class="bigger-110">标记已读</span>
+                                            </button>
+                                            <button class="btn btn-xs btn-white btn-primary" type="button">
+                                                <i class="ace-icon fa fa-eye-slash bigger-125 green"></i>
+                                                <span class="bigger-110">设为未读</span>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="messagebar-item-left">
+                                        <label class="inline middle">
+                                            <input type="checkbox" id="id-toggle-all" class="ace"/>
+                                            <span class="lbl"></span>
+                                        </label>
+                                        &nbsp;
+                                        <div class="inline position-relative">
+                                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                                <i class="ace-icon fa fa-caret-down bigger-125 middle"></i>&nbsp;
+                                                <span>选择</span>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-lighter dropdown-100">
+                                                <li>
+                                                    <a id="id-select-message-all" href="#">选中所有</a>
+                                                </li>
+                                                <li>
+                                                    <a id="id-select-message-none" href="#">重置选择</a>
+                                                </li>
+                                                <li class="divider"></li>
+                                                <li>
+                                                    <a id="id-select-message-unread" href="#">未读</a>
+                                                </li>
+                                                <li>
+                                                    <a id="id-select-message-read" href="#">已读</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="nav-search minimized ">
+                                        <form class="form-search">
+                                            <span class="input-icon">
+                                                <input type="text" autocomplete="off"
+                                                       class="input-small nav-search-input"
+                                                       placeholder="Search inbox ..."/>
+                                                <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                            </span>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="message-list-container">
+                                <div class="message-list" id="message-list">
+                                    {% if notification_type == "site" %}
+                                        {% for notification in unread %}
+                                            <div class="message-item message-unread">
+                                                <label class="inline">
+                                                    <input type="checkbox" class="ace"/>
+                                                    <span class="lbl"></span>
+                                                </label>
+                                                <span class="summary">
+                                                    <span class="text">             </span>
+                                                </span>
+                                                {{ notification|safe }}
+
+                                                <span class="">{{ notification.date|localize }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+
+                                    {% if notification_type == 'app' %}
+                                        {% for notification in unread %}
+                                            <div class="message-item message-unread">
+                                                <label class="inline">
+                                                    <input type="checkbox" class="ace"/>
+                                                    <span class="lbl"></span>
+                                                </label>
+                                                <span class="summary">
+                                                    <span class="text">
+                                                    <a href="/notification/read?notification_type=app&notification_id={{ notification.id }}&next={{ notification.to_do_reference_url }}">
+                                                        <i class="btn btn-xs no-hover btn-pink fa {{ notification.get_ico }}"></i>
+                                                        <b>{{ notification.get_app_name }}</b>
+                                                        {{ notification.content }}
+                                                    </a>
+                                                    </span>
+                                                </span>
+                                                <span class="pull-right">{{ notification.date|localize }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <div class="message-item">
+                                        <label class="inline">
+                                            <input type="checkbox" class="ace"/>
+                                            <span class="lbl"></span>
+                                        </label>
+
+
+                                        <span class="sender" title="Philip Markov">Philip Markov </span>
+                                        <span class="time">10:15 am</span>
+
+																<span class="attachment">
+																	<i class="ace-icon fa fa-paperclip"></i>
+																</span>
+
+																<span class="summary">
+																	<span class="message-flags">
+																		<i class="ace-icon fa fa-reply light-grey"></i>
+																	</span>
+																	<span class="text">
+																		Photo booth beard raw denim letterpress vegan
+																	</span>
+																</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="message-footer clearfix">
+                                <div class="pull-left"> 151 messages total</div>
+
+                                <div class="pull-right">
+                                    <div class="inline middle"> page 1 of 16</div>
+
+                                    &nbsp; &nbsp;
+                                    <ul class="pagination middle">
+                                        <li class="disabled">
+																	<span>
+																		<i class="ace-icon fa fa-step-backward middle"></i>
+																	</span>
+                                        </li>
+
+                                        <li class="disabled">
+																	<span>
+																		<i class="ace-icon fa fa-caret-left bigger-140 middle"></i>
+																	</span>
+                                        </li>
+
+                                        <li>
+																	<span>
+																		<input value="1" maxlength="3" type="text"/>
+																	</span>
+                                        </li>
+
+                                        <li>
+                                            <a href="#">
+                                                <i class="ace-icon fa fa-caret-right bigger-140 middle"></i>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#">
+                                                <i class="ace-icon fa fa-step-forward middle"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.tab-content -->
+            </div>
+            <!-- /.tabbable -->
+        </div>
+        <!-- /.col -->
+    </div><!-- /.row -->
+
+    <!-- PAGE CONTENT ENDS -->
+{% endblock page_content %}
+
+{% block page_plugin_js %}
+    {{ block.super }}
+    <!-- page specific plugin scripts -->
+    <script src="{% static "base_from_ace/js/date-time/bootstrap-datepicker.min.js" %}"></script>
+    <script src="{% static "base_from_ace/js/bootstrap-tag.min.js" %}"></script>
+    <script src="{% static "base_from_ace/js/jquery.hotkeys.min.js" %}"></script>
+    <script src="{% static "base_from_ace/js/bootstrap-wysiwyg.min.js" %}"></script>
+    <script src="{% static "base_from_ace/js/jquery-ui.custom.min.js" %}"></script>
+    <script src="{% static "base_from_ace/js/jquery.ui.touch-punch.min.js" %}"></script>
+    <script src="{% static "base_from_ace/js/jquery.slimscroll.min.js" %}"></script>
+{% endblock page_plugin_js %}
+
+{% block inline_scripts_to_page %}
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+        jQuery(function ($) {
+
+            //handling tabs and loading/displaying relevant messages and forms
+            //not needed if using the alternative view, as described in docs
+            $('#inbox-tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+                var currentTab = $(e.target).data('target');
+                if (currentTab == 'write') {
+                    Inbox.show_form();
+                }
+                else if (currentTab == 'site_notification') {
+                    Inbox.show_site_notification_list();
+                }
+                else if (currentTab == 'app_notification') {
+                    Inbox.show_app_notification_list();
+                }
+            })
+
+
+            //basic initializations
+            {#            $('.message-list .message-item input[type=checkbox]').removeAttr('checked');#}
+            {#            $('.message-list').on('click', '.message-item input[type=checkbox]', function () {#}
+            {#                $(this).closest('.message-item').toggleClass('selected');#}
+            {#                if (this.checked) Inbox.display_bar(1);//display action toolbar when a message is selected#}
+            {#                else {#}
+            {#                    Inbox.display_bar($('.message-list input[type=checkbox]:checked').length);#}
+            {#                    //determine number of selected messages and display/hide action toolbar accordingly#}
+            {#                }#}
+            {#            });#}
+
+
+            //check/uncheck all messages
+            $('#id-toggle-all').removeAttr('checked').on('click', function () {
+                if (this.checked) {
+                    Inbox.select_all();
+                } else Inbox.select_none();
+            });
+
+            //select all
+            $('#id-select-message-all').on('click', function (e) {
+                e.preventDefault();
+                Inbox.select_all();
+            });
+
+            //select none
+            $('#id-select-message-none').on('click', function (e) {
+                e.preventDefault();
+                Inbox.select_none();
+            });
+
+            //select read
+            $('#id-select-message-read').on('click', function (e) {
+                e.preventDefault();
+                Inbox.select_read();
+            });
+
+            //select unread
+            $('#id-select-message-unread').on('click', function (e) {
+                e.preventDefault();
+                Inbox.select_unread();
+            });
+
+            /////////
+
+            var Inbox = {
+                //displays a toolbar according to the number of selected messages
+                display_bar: function (count) {
+                    if (count == 0) {
+                        $('#id-toggle-all').removeAttr('checked');
+                        $('#id-message-list-navbar .message-toolbar').addClass('hide');
+                        $('#id-message-list-navbar .message-infobar').removeClass('hide');
+                        console.log(count)
+                    }
+                    else {
+                        $('#id-message-list-navbar .message-infobar').addClass('hide');
+                        $('#id-message-list-navbar .message-toolbar').removeClass('hide');
+                        console.log(count)
+                    }
+                }
+                ,
+                select_all: function () {
+                    var count = 0;
+                    $('.message-item input[type=checkbox]').each(function () {
+                        this.checked = true;
+                        $(this).closest('.message-item').addClass('selected');
+                        count++;
+                    });
+
+                    $('#id-toggle-all').get(0).checked = true;
+
+                    Inbox.display_bar(count);
+                }
+                ,
+                select_none: function () {
+                    $('.message-item input[type=checkbox]').removeAttr('checked').closest('.message-item').removeClass('selected');
+                    $('#id-toggle-all').get(0).checked = false;
+
+                    Inbox.display_bar(0);
+                }
+                ,
+                select_read: function () {
+                    $('.message-unread input[type=checkbox]').removeAttr('checked').closest('.message-item').removeClass('selected');
+
+                    var count = 0;
+                    $('.message-item:not(.message-unread) input[type=checkbox]').each(function () {
+                        this.checked = true;
+                        $(this).closest('.message-item').addClass('selected');
+                        count++;
+                    });
+                    Inbox.display_bar(count);
+                }
+                ,
+                select_unread: function () {
+                    $('.message-item:not(.message-unread) input[type=checkbox]').removeAttr('checked').closest('.message-item').removeClass('selected');
+
+                    var count = 0;
+                    $('.message-unread input[type=checkbox]').each(function () {
+                        this.checked = true;
+                        $(this).closest('.message-item').addClass('selected');
+                        count++;
+                    });
+
+                    Inbox.display_bar(count);
+                }
+            }
+
+            //show message list (back from writing mail or reading a message)
+            Inbox.show_site_notification_list = function () {
+                $('.message-navbar').addClass('hide');
+                $('#id-message-list-navbar').removeClass('hide');
+
+                $('.message-footer').addClass('hide');
+                $('.message-footer:not(.message-footer-style2)').removeClass('hide');
+
+                $('.message-list').removeClass('hide').next().addClass('hide');
+                //hide the message item / new message window and go back to list
+            }
+        });
+    </script>
+{% endblock %}

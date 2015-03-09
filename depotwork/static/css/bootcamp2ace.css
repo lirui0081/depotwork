@@ -1,0 +1,9 @@
+ul li .user-picture {
+    width: 35px;
+    border-radius: 5px;
+    float: left;
+}
+
+.no_border_link {
+    border-top: 0px solid;
+}

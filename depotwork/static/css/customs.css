@@ -1,0 +1,7 @@
+.message-navbar .messagebar-item-left~.nav-search{
+    left:120px;
+}
+
+a:link,a:visited,a:hover{
+ text-decoration:none;  /*超链接无下划线*/
+}

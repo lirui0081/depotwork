@@ -1,0 +1,37 @@
+<div id="navbar" class="navbar navbar-default">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="navbar-container" id="navbar-container">
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
+            <span class="sr-only">Toggle sidebar</span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+        </button>
+
+        {#    页面logo    #}
+        <div class="navbar-header pull-left">
+                <a href="{% url 'asset home' %}#" class="navbar-brand">
+                    <small>
+
+                        <i class="fa fa-leaf"></i>
+                        仓库办公
+                    </small>
+                </a>
+        </div>
+
+        {# 导航 #}
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
+            {% include 'base/auth/navbar_header_right.html' %}
+        </div>
+    </div>
+    <!-- /.navbar-container -->
+</div>
