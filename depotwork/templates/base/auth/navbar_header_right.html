@@ -205,15 +205,15 @@
 
     {# user profile #}
     <li class="light-blue">
-        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-            {% if user.avatars.url %}
-                <img class="nav-user-photo" src="{{ user.avatars.url }}" alt="Jason's Photo"/>
+        <a data-toggle="dropdown" href="" class="dropdown-toggle">
+            {% if user.profile.get_picture %}
+                <img class="nav-user-photo" src="{{ user.profile.get_picture }}" alt="Jason's Photo"/>
             {% else %}
                 <img class="nav-user-photo" src="{% static 'base_from_ace/avatars/user.jpg' %}" alt="Jason's Photo"/>
             {% endif %}
             <span class="user-info">
 									<small>欢迎,</small>
-									{{ user.name }}
+									{{ user.profile.get_screen_name }}
 								</span>
 
             <i class="ace-icon fa fa-caret-down"></i>

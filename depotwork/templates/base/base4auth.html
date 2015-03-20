@@ -12,8 +12,10 @@
     <link rel="stylesheet" href="{% static 'base_from_ace/css/font-awesome.min.css' %}"/>
 
     <!-- page specific plugin styles -->
-    <link rel="stylesheet" href="{% static 'css/bootcamp2ace.css' %}"/>
+    {% block page_plugin_styles %}
+        <link rel="stylesheet" href="{% static 'customs/bootcamp2ace.css' %}"/>
 
+    {% endblock page_plugin_styles %}
 
 
     <!-- text fonts -->
@@ -316,6 +318,7 @@
     {% block page_plugin_js %}
         <script src="{{ STATIC_URL }}js/ace_notifications.js"></script>
         <script src="{{ STATIC_URL }}js/check_messages.js"></script>
+        <script src="{{ STATIC_URL }}customs/django.csrf.js"></script>
 
     {% endblock page_plugin_js %}
 

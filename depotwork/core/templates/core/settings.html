@@ -1,62 +1,234 @@
-{% extends 'base.html' %}
-{% load i18n %}
-{% get_available_languages as LANGUAGES %}
-{% get_current_language as CURRENT_LANGUAGE %}
+{% extends "base/base4auth.html" %}
+{% load staticfiles %}
 
-{% block title %}Account Settings{% endblock %}
+{% block page_plugin_styles %}
+    <link rel="stylesheet" href="{% static 'base_from_ace/css/jquery-ui.custom.min.css' %}">
+    <link rel="stylesheet" href="{% static 'base_from_ace/css/jquery.gritter.css' %}">
+    <link rel="stylesheet" href="{% static 'base_from_ace/css/select2.css' %}">
+    <link rel="stylesheet" href="{% static 'base_from_ace/css/bootstrap-editable.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'base_from_ace/css/datepicker.css' %}"/>#}
 
-{% block main %}
-  <div class="page-header">
-    <h1>{% trans 'Account Settings' %}</h1>
-  </div>
-  <div class="row" style="margin-top: 2em">
-    <div class="col-md-3">
-      {% include 'core/partial_settings_menu.html' with active='profile' %}
-    </div>
-    <div class="col-md-9">
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-success alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-      <h3 style="margin-top: 0">{% trans 'Edit Profile' %}</h3>
-      <form role="form" class="form-horizontal" method="post" action="{% url 'settings' %}">
-        {% csrf_token %}
-        {% for field in form.visible_fields %}
-          <div class="form-group{% if field.errors %} has-error{% endif %}">
-            <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
-            <div class="col-sm-10">
-              {{ field }}
-              {% if field.help_text %}
-                <span class="help-block">{{ field.help_text }}</span>
-              {% endif %}
-              {% for error in field.errors %}
-                <label class="control-label">{{ error }}</label>
-              {% endfor %}
-            </div>
-          </div>
-        {% endfor %}
-        {% comment %}
-        <div class="form-group">
-          <label for="language" class="col-sm-2 control-label">Language</label>
-          <div class="col-sm-10">
-            <select id="language" name="language" class="form-control">
-              {% for lang in LANGUAGES %}
-                <option value="{{ lang.0 }}">{{ lang.1 }}</option>
-              {% endfor %}
-            </select>
-          </div>
+{#    <link href="{{ STATIC_URL }}css/jquery.Jcrop.min.css" rel="stylesheet">#}
+{#    <script src="{{ STATIC_URL }}js/jquery.Jcrop.min.js"></script>#}
+{#    <script src="{{ STATIC_URL }}js/picture.js"></script>#}
+    {{ block.super }}
+{% endblock %}
+
+{% block page_content %}
+    <div id="settings-profile" class="user-profile row">
+        <div class="col-sm-offset-1 col-sm-10">
+
+            <div class="space"></div>
+
+                {#            <form class="form-horizontal">#}
+                <div class="tabbable">
+                    <ul class="nav nav-tabs padding-16">
+                        <li class="active">
+                            <a data-toggle="tab" href="#edit-basic">
+                                <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                                基本信息
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a data-toggle="tab" href="#edit-password">
+                                <i class="blue ace-icon fa fa-key bigger-125"></i>
+                                密码
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content profile-edit-tab-content">
+                        <div id="edit-basic" class="tab-pane in active">
+
+                            <h4 class="header blue bolder smaller">基本信息</h4>
+                             {# 信息提示 #}
+                            <div class="alert alert-block alert-success " id="alert_message_for_basic_info">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <i class="ace-icon fa fa-times"></i>
+                                </button>
+                                <p>
+                                    <strong id="alert_message_title">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        注意：
+                                    </strong>
+                                    <span id="alert_message_content">
+                                        {% if not user.profile.job_title %}修改职务信息，请点击“未填写职务”。{% endif %}
+                                        修改头像直接点击图片框。
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="user-profile row">
+                                <div class="col-xs-12 col-sm-4 center">
+                                    <div>
+                                        <form >
+                                            <span class="profile-picture">
+                                                <img id="avatar" class="editable img-responsive" alt="{{ user.username }}" src="{{ user.profile.get_picture }}">
+                                            </span>
+                                        </form>
+                                        <div class="space-4"></div>
+                                        <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                                            <div class="inline position-relative">
+                                                <span class="editable editable-click" id="job_title"
+                                                      style="display: inline;">{% if user.profile.job_title %}{{ user.profile.job_title }}{% else %}未填写职务{% endif %}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="vspace-12-sm"></div>
+                                <div class="col-xs-12 col-sm-7">
+                                   <form class="form-horizontal" id="profile">
+                                    <h4 class="header blue bolder smaller">基本信息</h4>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">登陆账号</label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-10" type="text" id="username" disabled="false"
+                                                   placeholder="账号" value="{{ user.username }}"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">姓        名</label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-10" type="text" id="full_name"
+                                                   placeholder="真实姓名"
+                                                   value="{% if user.profile.get_screen_name %}{{ user.profile.get_screen_name }}{% endif %}"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">座右铭</label>
+
+                                        <div class="col-xs-8">
+                                            <textarea id="motto" class="col-xs-12 col-sm-10"></textarea>
+                                        </div>
+                                    </div>
+                                    <h4 class="header blue bolder smaller">联系方式</h4>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">
+                                            <i class="ace-icon fa fa-map-marker light-orange fa-flip-horizontal"></i>  住址</label>
+                                        <div class="col-sm-8">
+                                                <input class="col-xs-12 col-sm-10"
+                                                       type="text" id="location"
+                                                       value="{% if user.profile.location %}{{ user.profile.location }}{% endif %}"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">
+                                            <i class="ace-icon fa fa-phone light-red fa-flip-horizontal"></i>  电话</label>
+
+                                        <div class="col-sm-8">
+                                            <input class="col-xs-12 col-sm-10"
+                                                   type="text" id="phone"
+                                                   value="{% if user.profile.phone %}{{ user.profile.phone }}{% endif %}">
+                                        </div>
+                                    </div>
+                                   <div class="header blue bolder smaller ">  &nbsp;</div>
+                                   <div class="clearfix ">
+                                        <button class="btn btn-info pull-right" type="button" id="profile_submit">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            保存
+                                        </button>
+                                   </div>
+                                </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div id="edit-password" class="tab-pane">
+                            <form class="form-horizontal">
+                                <div class="space-10"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-pass1">
+                                        原密码
+                                    </label>
+
+                                    <div class="col-sm-9">
+                                        <input type="password" id="form-field-pass_old"/>
+                                    </div>
+                                </div>
+                                <div class="space-4"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-pass1">
+                                        新密码
+                                    </label>
+
+                                    <div class="col-sm-9">
+                                        <input type="password" id="form-field-pass1"/>
+                                    </div>
+                                </div>
+
+                                <div class="space-4"></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-pass2">
+                                        确认密码
+                                    </label>
+
+                                    <div class="col-sm-9">
+                                        <input type="password" id="form-field-pass2"/>
+                                    </div>
+                                </div>
+                                <div class="header blue bolder smaller ">  &nbsp;</div>
+                                   <div class="clearfix ">
+                                        <button class="btn btn-info pull-right" type="button" id="password_submit">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            保存
+                                        </button>
+                                   </div>
+                            </form>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+{#                <div class="clearfix form-actions">#}
+{#                    <div class="col-md-offset-3 col-md-9">#}
+{#                        <button class="btn btn-info" type="button" id="submit">#}
+{#                            <i class="ace-icon fa fa-check bigger-110"></i>#}
+{#                            保存#}
+{#                        </button>#}
+{#                        &nbsp;&nbsp;#}
+{#                        <button class="btn" type="reset" id="reset">#}
+{#                            <i class="ace-icon fa fa-undo bigger-110"></i>#}
+{#                            取消#}
+{#                        </button>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </form>#}
         </div>
-        {% endcomment %}
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
-          </div>
-        </div>
-      </form>
+        <!-- /.span -->
     </div>
-  </div>
-{% endblock main %}
+{% endblock %}
+
+
+{% block page_plugin_js %}
+    {{ block.super }}
+		<script src="{% static 'base_from_ace/js/jquery-ui.custom.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/jquery.ui.touch-punch.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/jquery.gritter.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/bootbox.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/jquery.easypiechart.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/date-time/bootstrap-datepicker.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/jquery.hotkeys.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/bootstrap-wysiwyg.min.js' %}"></script>
+{#		<script src="{% static 'base_from_ace/js/select2.min.js' %}"></script>#}
+		<script src="{% static 'base_from_ace/js/fuelux/fuelux.spinner.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/x-editable/bootstrap-editable.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/x-editable/ace-editable.min.js' %}"></script>
+		<script src="{% static 'base_from_ace/js/jquery.maskedinput.min.js' %}"></script>
+    {#    <script src="{% static 'base_from_ace/js/date-time/bootstrap-datepicker.min.js' %}"></script>#}
+{% endblock %}
+
+{% block inline_scripts_to_page %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/setting_ace.js' %}"></script>
+{% endblock %}

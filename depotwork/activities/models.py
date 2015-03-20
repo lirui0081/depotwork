@@ -63,49 +63,49 @@ class Notification(models.Model):
     #                   u'<i class="menu-icon fa fa-list-alt"></i>{4}</a></span>'
     _LIKED_TEMPLATE=  u'<a href="/notification/read?notification_type=site&notification_id={0}&next=/feeds/{1}/">' \
                       u'<div class="clearfix"> ' \
-                      u'<span class="pull-left "><div class="user"><img src="{2}" class="user-picture"></div>{3}</span>' \
+                      u'<span class="pull-left "><div class="user"><img src="{2}" class="notification-user-picture"></div>{3}</span>' \
                       u'<div class="clearfix"><span class="pull-right">赞了: {4}</span></div>' \
                       u'</div> '
     # _COMMENTED_TEMPLATE = u'<a href="/{0}/">{1}</a> 评论了你的帖: ' \
     #                       u'<a style="border-top: 0px" href="/feeds/{2}/">{3}</a>'
     _COMMENTED_TEMPLATE=  u'<a href="/notification/read?notification_type=site&notification_id={0}&next=/feeds/{1}/">' \
                       u'<div class="clearfix"> ' \
-                      u'<span class="pull-left "><div class="user"><img src="{2}" class="user-picture"></div>{3}</span>' \
+                      u'<span class="pull-left "><div class="user"><img src="{2}" class="notification-user-picture"></div>{3}</span>' \
                       u'<div class="clearfix"><span class="pull-right">评论了: {4}</span></div>' \
                       u'</div> '
     # _FAVORITED_TEMPLATE = u'<a href="/{0}/">{1}</a>关注了你的问题: ' \
     #                       u'<a style="border-top: 0px" href="/questions/{2}/">{3}</a>'
     _FAVORITED_TEMPLATE=  u'<a href="/notification/read?notification_type=site&notification_id={0}&next=/questions/{1}/">' \
                       u'<div class="clearfix"> ' \
-                      u'<span class="pull-left "><div class="user"><img src="{2}" class="user-picture"></div>{3}</span>' \
+                      u'<span class="pull-left "><div class="user"><img src="{2}" class="notification-user-picture"></div>{3}</span>' \
                       u'<div class="clearfix"><span class="pull-right">关注: {4}</span></div>' \
                       u'</div> '
     # _ANSWERED_TEMPLATE = u'<a href="/{0}/">{1}</a> 回答了你的问题: ' \
     #                      u'<a style="border-top: 0px" href="/questions/{2}/">{3}</a>'
     _ANSWERED_TEMPLATE=  u'<a href="/notification/read?notification_type=site&notification_id={0}&next=/questions/{1}/">' \
                       u'<div class="clearfix"> ' \
-                      u'<span class="pull-left "><div class="user"><img src="{2}" class="user-picture"></div>{3}</span>' \
+                      u'<span class="pull-left "><div class="user"><img src="{2}" class="notification-user-picture"></div>{3}</span>' \
                       u'<div class="clearfix"><span class="pull-right">回答: {4}</span></div>' \
                       u'</div> '
     # _ACCEPTED_ANSWER_TEMPLATE = u'<a href="/{0}/">{1}</a> 接受了你的答案: ' \
     #                             u'<a style="border-top: 0px" href="/questions/{2}/">{3}</a>'
     _ACCEPTED_ANSWER_TEMPLATE=  u'<a href="/notification/read?notification_type=site&notification_id={0}&next=/questions/{1}/">' \
                       u'<div class="clearfix"> ' \
-                      u'<span class="pull-left "><div class="user"><img src="{2}" class="user-picture"></div>{3}</span>' \
+                      u'<span class="pull-left "><div class="user"><img src="{2}" class="notification-user-picture"></div>{3}</span>' \
                       u'<div class="clearfix"><span class="pull-right">接受答案: {4}</span></div>' \
                       u'</div> '
     # _EDITED_ARTICLE_TEMPLATE = u'<a href="/{0}/">{1}</a> 编辑了你的文章: ' \
     #                            u'<a style="border-top: 0px" href="/article/{2}/">{3}</a>'
     _EDITED_ARTICLE_TEMPLATE=  u'<a href="/notification/read?notification_type=site&notification_id={0}&next=/article/{1}/">' \
                       u'<div class="clearfix"> ' \
-                      u'<span class="pull-left "><div class="user"><img src="{2}" class="user-picture"></div>{3}</span>' \
+                      u'<span class="pull-left "><div class="user"><img src="{2}" class="notification-user-picture"></div>{3}</span>' \
                       u'<div class="clearfix"><span class="pull-right">编辑: {4}</span></div>' \
                       u'</div> '
     # _ALSO_COMMENTED_TEMPLATE = u'<a href="/{0}/">{1}</a> 也评论了贴: ' \
     #                            u'<a style="border-top: 0px" href="/feeds/{2}/">{3}</a>'
     _ALSO_COMMENTED_TEMPLATE=  u'<a href="/notification/read?notification_type=site&notification_id={0}&next=/feeds/{1}/">' \
                       u'<div class="clearfix"> ' \
-                      u'<span class="pull-left "><div class="user"><img src="{2}" class="user-picture"></div>{3}</span>' \
+                      u'<span class="pull-left "><div class="user"><img src="{2}" class="notification-user-picture"></div>{3}</span>' \
                       u'<div class="clearfix"><span class="pull-right">也评论: {4}</span></div>' \
                       u'</div> '
 

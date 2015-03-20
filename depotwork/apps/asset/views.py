@@ -2,6 +2,7 @@
 
 from django.shortcuts import render
 from django.utils.translation import ugettext
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -9,8 +10,7 @@ from django.utils.translation import ugettext
 def all_notification(req):
     pass
 
-
+@login_required
 def home(req):
-    user = {}
-    user['name'] = ugettext('feed')
-    return render(req, 'asset/index.html', {'user': user})
+
+    return render(req, 'asset/index.html')

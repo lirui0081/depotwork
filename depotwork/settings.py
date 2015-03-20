@@ -1,5 +1,6 @@
 # coding:utf-8
 from unipath import Path
+
 PROJECT_DIR = Path(__file__).parent
 
 from decouple import config
@@ -16,12 +17,13 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # DATABASES = {
-#     'default': dj_database_url.config(
+# 'default': dj_database_url.config(
 #       default = config('DATABASE_URL'))
 # }
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 DATABASES = {
@@ -37,10 +39,17 @@ DATABASES = {
 SECRET_KEY = '01asb8%!ma51=-%u4=q^or%!n^ol^1vpp+zy*@_uve2x*ayi@^'
 
 ALLOWED_HOSTS = ['127.0.0.1']
+# 自定义的变量
+REDIRECT_FIELD_NAME = 'next'
+
+PAGINATOR_NUM = 5
+
+AVATAR_IMAGE_WIDTH = 600
 
 # Application definition
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

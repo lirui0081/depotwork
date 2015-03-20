@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="3848321689">
-    <data-source source="LOCAL" name="Django default" uuid="2af8702a-a6f9-429f-9949-adac44eea5a8">
+  <component name="DataSourceManagerImpl" format="xml" hash="2987547027">
+    <data-source source="LOCAL" name="Django default" uuid="3dac9751-e1d7-4643-86fc-e3cb772c1a72">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\workshop\ProjectRepositories\Python\Django\depotwork\db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:E:\work\Github\depotwork\db.sqlite3</jdbc-url>
       <libraries>
         <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/sqlite-jdbc-3.7.6.3-20110609.081603-3.jar</url>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/xerial-sqlite-license.txt</url>
         </library>
         <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/xerial-sqlite-license.txt</url>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/sqlite-jdbc-3.7.6.3-20110609.081603-3.jar</url>
         </library>
       </libraries>
     </data-source>
